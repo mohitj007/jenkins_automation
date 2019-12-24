@@ -4,7 +4,7 @@ pipeline {
    stages {
       stage('Creating base jobs') {
           steps {
-		         echo "Building pipeline for base jobs creation"
+	     echo "Building pipeline for base jobs creation"
              build 'pipeline'
           }
       }
