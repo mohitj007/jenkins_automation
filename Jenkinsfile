@@ -2,19 +2,18 @@ pipeline {
    agent any
 
    stages {
-      stage('Checking out code') {
+      stage('Creating base jobs') {
           steps {
-             echo "Checking out jobs code from github"
-	     git 'https://github.com/mohitj007/jenkins_automation.git'
-             sh label: '', script: '''cd /tmp/; if [ -f /tmp/jenkins-cli.jar ]; then echo \\\'Jenkins cli already present\\\'; else wget http://localhost:8080/jnlpJars/jenkins-cli.jar; fi;
+             git 'https://github.com/mohitj007/jenkins_automation.git'
+             sh label: '', script: '''cd /tmp/; if [ -f /tmp/jenkins-cli.jar ]; then echo \'Jenkins cli already present\'; else wget http://localhost:8080/jnlpJars/jenkins-cli.jar; fi;
              cliconnect="java -jar /tmp/jenkins-cli.jar -s http://`hostname -i`:8080 -auth admin:admin"
-             cd /tmp/test2; for i in `ls -l|awk \'{print $9}\'`; do file=`echo $i|cut -d \'.\' -f1`; echo $file; $cliconnect create-job $file < `pwd`/$i; done
+             for i in `cat jobstobuild`; do $cliconnect list-jobs|grep -i $i; if [ $? == 0 ]; then echo \\\'Job $i already present\\\'; else $cliconnect create-job $i < `pwd`/$i.xml; fi; done
              $cliconnect reload-configuration'''
+             echo "Building base jobs pipeline"
           }
       }
-      stage('Checking out codespaces repo') {
+      stage('Checking out code') {
          steps {
-            echo 'Checking out clean code'
             build 'job1'
          }
       }
