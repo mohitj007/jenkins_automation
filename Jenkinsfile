@@ -14,19 +14,19 @@ pipeline {
       stage('Checking out code') {
          steps {
             echo 'Building job 1'
-            //build 'job1'
+            build 'job1'
          }
       }
       stage('Deploying docker compose') {
          steps {
             echo 'Deploying docker compose file'
-            //build job: 'job2', propagate: false
+            build job: 'job2', propagate: false
          }
       }
       stage('Cleaning repository') {
          steps {
             echo 'cleaning git repository'
-            //build 'job3'
+            build 'job3'
          }
       }
    }
