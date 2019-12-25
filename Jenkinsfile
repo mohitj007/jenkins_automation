@@ -6,7 +6,7 @@ pipeline {
           steps {
              sh label: '', script: '''cd /tmp/; if [ -f /tmp/jenkins-cli.jar ]; then echo \'Jenkins cli already present\'; else wget http://localhost:8080/jnlpJars/jenkins-cli.jar; fi;
              cliconnect="java -jar /tmp/jenkins-cli.jar -s http://`hostname -i`:8080 -auth admin:admin"
-             cd $WORKSPACE; pwd; for i in `cat jobstobuild`; do $cliconnect list-jobs|grep -i $i; if [ $? == 0 ]; then echo "Job $i already present"; else $cliconnect create-job $i < `pwd`/$i.xml; fi; done
+             cd $WORKSPACE; pwd; for i in `cat jobstobuild`; do $cliconnect list-jobs|grep -i $i; if [ $? == 0 ]; then echo "Job $i already present"; else "Job $i is absent" < `pwd`/$i.xml; fi; done
              $cliconnect reload-configuration'''
              echo "Building base jobs pipeline"
           }
