@@ -12,6 +12,7 @@ pipeline {
       stage('Test') {
          steps {
             echo 'Hi this is test stage. Running some test cases'
+            echo 'Updated Jenkinsfile to test webhook'
          }
       }
    }
